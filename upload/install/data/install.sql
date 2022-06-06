@@ -730,6 +730,36 @@ CREATE TABLE pre_common_member (
   KEY secmobile (`secmobile`, `secmobicc`)
 ) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS pre_common_member_applist;
+CREATE TABLE pre_common_member_applist (
+  `appid`   smallint(6) NOT NULL AUTO_INCREMENT,
+  `appname` varchar(128) NOT NULL,
+  `type`    tinyint(1) NOT NULL,
+  `status`  tinyint(1) NOT NULL,
+  PRIMARY KEY (`appid`)
+) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS pre_common_member_appbind;
+CREATE TABLE pre_common_member_appbind (
+  `pluginid` smallint(6) unsigned NOT NULL,
+  `subtype`  tinyint(1) NOT NULL,
+  `appid`    smallint(6) NOT NULL,
+  PRIMARY KEY (`pluginid`, `subtype`)
+) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS pre_common_member_plugin;
+CREATE TABLE pre_common_member_plugin (
+  `uid` mediumint(8) unsigned NOT NULL,
+  `appid` smallint(6) unsigned NOT NULL,
+  `subtype` tinyint(1) NOT NULL,
+  `loginid` varchar(200) NOT NULL DEFAULT '',
+  `regdate` int(10) unsigned NOT NULL DEFAULT '0',
+  `extra` text NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`uid`, `appid`, `subtype`),
+  UNIQUE KEY loginid (`loginid`, `appid`, `subtype`)
+) ENGINE=InnoDB;
+
 DROP TABLE IF EXISTS pre_common_member_action_log;
 CREATE TABLE pre_common_member_action_log (
   id int(10) unsigned NOT NULL AUTO_INCREMENT,

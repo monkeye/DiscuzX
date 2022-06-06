@@ -556,6 +556,8 @@ function get_cachedata_setting_plugin($method = '') {
 		$addadminmenu = $plugin['available'] && C::t('common_pluginvar')->count_by_pluginid($plugin['pluginid']) ? TRUE : FALSE;
 		$plugin['modules'] = dunserialize($plugin['modules']);
 		if($available) {
+			$data['plugins']['pluginid'][$plugin['identifier']] = $plugin['pluginid'];
+			$data['plugins']['identifier'][$plugin['pluginid']] = $plugin['identifier'];
 			$data['plugins']['available'][] = $plugin['identifier'];
 			$data['plugins']['version'][$plugin['identifier']] = $plugin['version'];
 		}
@@ -710,7 +712,13 @@ function get_cachedata_setting_plugin($method = '') {
 		savecache('adminmenu', array_merge((array)$adminmenu[0], (array)$adminmenu[1]));
 	}
 
-
+	foreach(C::t('common_member_appbind')->fetch_all_data() as $row) {
+		$identifier = $data['plugins']['identifier'][$row['pluginid']];
+		if (!$identifier) {
+			continue;
+		}
+		$data['plugins']['appbind'][$identifier][$row['subtype']] = $row['appid'];
+	}
 
 	$data['pluginhooks'] = array();
 	foreach(array('hookscript', 'hookscriptmobile') as $hooktype) {
